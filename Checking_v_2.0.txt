@@ -1,5 +1,8 @@
 #include <iostream>
 #include <string>
+#include <iostream>
+#include <limits.h>
+#include <float.h>
 using namespace std;
 
 int checker_int(string text, int min, int max)
@@ -7,7 +10,6 @@ int checker_int(string text, int min, int max)
     string str;
     bool state = true;
     bool state_1 = true;
-    bool state_2 = true;
     int count = 0;
     int minus = 0;
     int num = 0;
@@ -17,21 +19,15 @@ int checker_int(string text, int min, int max)
         if (str.empty()) {
             cout << "The input is empty. Enter a number:" << endl;
             state_1 = false;
-            state_2 = false;           
         }
         else {
             state_1 = true;
-            state_2 = true;
             count = 0;
             minus = 0;
             while (count < str.length() and state_1) {
-                if ((str[count] == '-')) {
-                    minus += 1;
-                }
-                if (!isdigit(str[count]) and str[0] != '-' or (minus>1) or (str[count] ==  '-' and !isdigit(str[count + 1]))) {
+                if ((!isdigit(str[count]) and str[count] != '-') or (str[count] == '-' and !isdigit(str[count + 1]))) {
                     cout << "The input contains invalid characters. Enter a correct input:" << endl;
                     state_1 = false;
-                    state_2 = false;
                 }
                 count++;
             }
@@ -39,11 +35,10 @@ int checker_int(string text, int min, int max)
         try {
             num = stoi(str);
         }
-        catch (...) { state_2 = 0; }
-        if ((num < min or num > max) and state_2) {
+        catch (...) { state_1 = 0; }
+        if ((num < min or num > max) and state_1) {
             cout << "The input is not included in the boundaries. Enter a correct input:" << endl;
             state_1 = false;
-            state_2 = false;
         }
         if (state_1)
             state = 0;
@@ -56,7 +51,6 @@ double checker_double(string text, double min, double max)
     string str;
     bool state = true;
     bool state_1 = true;
-    bool state_2 = true;
     int count = 0;
     double num = 0;
     int point = 0;
@@ -66,21 +60,15 @@ double checker_double(string text, double min, double max)
         if (str.empty()) {
             cout << "The input is empty. Enter a number:" << endl;
             state_1 = false;
-            state_2 = false;
         }
         else {
             state_1 = true;
-            state_2 = true;
             count = 0;
             point = 0;
             while (count < str.length() and state_1) {
-                if ((str[count] == '.')) {
-                    point += 1;
-                }
-                if ((!isdigit(str[count]) and str[count] != '.' and str[count] != '-') or (str[0]=='.') or (point > 1) or (str[count] == '.' and !isdigit(str[count + 1]) or (str[count] == '-' and !isdigit(str[count + 1])))) {
+                if ((!isdigit(str[count]) and str[count] != '.' and str[count] != '-') or (str[0] == '.') or (str[count] == '.' and !isdigit(str[count + 1]) or (str[count] == '-' and !isdigit(str[count + 1])))) {
                     cout << "The input contains invalid characters. Enter a correct input:" << endl;
                     state_1 = false;
-                    state_2 = false;
                 }
                 count++;
             }
@@ -88,13 +76,20 @@ double checker_double(string text, double min, double max)
         try {
             num = stod(str);
         }
-        catch (...) { state_2 = 0; }
-        if ((abs(num) < min or num > max) and state_2) {
-            cout << "The input contains invalid characters. Enter a correct input:" << endl;
+        catch (...) { state_1 = 0; }
+        if ((num < min or num > max) and state_1) {
+            cout << "The input is not included in the boundaries. Enter a correct input:" << endl;
             state_1 = false;
         }
         if (state_1)
             state = 0;
     }
     return num;
+}
+
+int main() {
+    int x = checker_int("Enter int:", -INT_MAX, INT_MAX);
+    cout << x << endl;
+    double y = checker_double("Enter double:", -DBL_MAX, DBL_MAX);
+    cout << y << endl;
 }
